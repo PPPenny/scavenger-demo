@@ -1,11 +1,82 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>转盘</title>
-    </head>
-    <body>
-        <div class="">
 
-        </div>
-    </body>
+<head>
+    <title>转盘</title>
+</head>
+<style>
+    .content {
+        position: relative;
+        width: 50%;
+        margin-left: 25%;
+    }
+
+    .background {
+        width: 100%;
+    }
+
+    .pointer {
+        position: absolute;
+        width: 40%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-43%, -55%);
+    }
+
+    .showTxt {
+        text-align: center;
+        font-size: 20px;
+        margin-top: 10px;
+    }
+</style>
+
+<body>
+    <div class="content">
+        <img src="./image/back.png" class="background" />
+        <img src="./image/pointer.png" class="pointer" />
+    </div>
+    <div class="showTxt"></div>
+</body>
+<script>
+    let allData
+    window.onload = function () {
+        let xmlHttp = new XMLHttpRequest()
+        xmlHttp.open('GET', './data/data.json', true)
+        xmlHttp.send()
+        xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.status === 200 && xmlHttp.readyState === 4) {
+                allData = JSON.parse(xmlHttp.response).data
+            }
+        }
+
+    }
+    // 获取奖励
+    function getReward() {
+        return parseInt(Math.random() * 10)
+    }
+
+    function perDegree() {
+        return Number(360 / allData.length).toFixed(1)
+    }
+
+    document.getElementsByClassName('content')[0].addEventListener("click", rotate)
+    async function rotate() {
+        let dom = document.getElementsByClassName('background')[0]
+        let showTxt = document.getElementsByClassName('showTxt')[0]
+        dom.removeAttribute('style')
+        showTxt.innerHTML = ''
+        let index = getReward()
+        let degree = index * perDegree() + 360 * 5
+        setTimeout(() => {
+            dom.setAttribute('style', 'transform:rotate(' + degree +
+                'deg);transition:transform 2s ease-in-out;')
+            setTimeout(() => {
+                showTxt.innerHTML = "恭喜你，中了" + allData[index].name
+            }, 2000)
+
+        }, 0)
+
+    }
+</script>
+
 </html>
