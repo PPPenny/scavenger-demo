@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>九宫格</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<style>
+    .background {
+        width: 400px;
+        position: relative;
+        margin: auto;
+    }
+
+    .background img {
+        width: 100%;
+    }
+
+    .front {
+        position: absolute;
+        padding: 23px 20px 26px 21px;
+        bottom: 6px;
+        top: 0;
+        left: 0;
+        width: calc(100% - 40px);
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .item {
+        width: 120px;
+        border-radius:15px; 
+        background: rgba(0,0,0,0.5)
+    }
+    .show-btn,
+    .no-mask{
+        background: none;
+    }
+</style>
+
+<body>
+    <div class="content">
+        <div class="background">
+            <img src="./image/nine.png" />
+            <div class="front">
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item show-btn"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const indexArr = [0,1,2,5,8,7,6,3]
+    const domArr = $(".item")
+    function getIndex(){
+        return parseInt(Math.random()*9) 
+    }
+    // function getRoate(){
+    //     let newArry= []
+    //     for(var i = 0;i<5;i++){
+    //        newArry = newArry.concat(indexArr)
+    //     }
+    //     return newArry
+    // }
+    function getRoate(){
+        let newArry= []
+        for(let i = 0;i<5;i++){
+            for(let j = 0;j<indexArr.length;j++ ){
+                 newArry.push(indexArr[j])
+            }  
+        }
+        return newArry
+    }
+
+    $(".show-btn").on("click",function(){
+        let index = getIndex();
+        let lastArry =  getRoate().concat(indexArr.slice(0,index))
+        for(let j = 0;j<lastArry.length;j++){
+             setTimeout(()=>{
+                    $(domArr).removeClass("no-mask")
+                    $(domArr[lastArry[j]]).addClass("no-mask") 
+             },2*j*j)
+             }
+    })
+</script>
+
+</html>
