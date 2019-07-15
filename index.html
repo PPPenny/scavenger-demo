@@ -3,6 +3,8 @@
 <head>
   <title>Penny Test</title>
   <meta charset="utf-8">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="./js/underscore.js"></script>
 </head>
 <style>
 .gift-body{
@@ -104,17 +106,26 @@
         ctx.stroke();
         ctx.restore();
     }
+    // function getImageAlpha(){
+    //     let imageData = ctx.getImageData(offsetTop,offsetLeft,offsetWidth, offsetHeight)
+    //     const {data} = imageData
+    //     let index = data.length / 4
+    //     const points = [];
+    //     for(let i=1;i<=index;i++){
+    //         if(data[i*4-1] == 0){
+    //             points.push(i)
+    //         }
+    //     }
+    //     if(Number(points.length/index).toFixed(1) > 0.5){
+    //         canvas.parentNode.removeChild(canvas);
+    //     }
+    // }
     function getImageAlpha(){
         let imageData = ctx.getImageData(offsetTop,offsetLeft,offsetWidth, offsetHeight)
         const {data} = imageData
-        let index = data.length / 4
-        const points = [];
-        for(let i=1;i<=index;i++){
-            if(data[i*4-1] == 0){
-                points.push(i)
-            }
-        }
-        if(Number(points.length/index).toFixed(1) > 0.5){
+        let allLength = data.length / 4
+        let opacityLength = _.chain(data).chunk(4).filter(item=>item[3] === 0).value().length
+       if(opacityLength/allLength > 0.5){
             canvas.parentNode.removeChild(canvas);
         }
     }
