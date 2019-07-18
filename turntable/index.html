@@ -38,7 +38,10 @@
     <div class="showTxt"></div>
 </body>
 <script>
-    let allData
+    let allData;
+    let giftIndex;
+    const dom =  document.getElementsByClassName('background')[0]
+    const showTxt = document.getElementsByClassName('showTxt')[0]
     window.onload = function () {
         let xmlHttp = new XMLHttpRequest()
         xmlHttp.open('GET', './data/data.json', true)
@@ -59,23 +62,22 @@
         return Number(360 / allData.length).toFixed(1)
     }
 
-    document.getElementsByClassName('content')[0].addEventListener("click", rotate)
-    async function rotate() {
-        let dom = document.getElementsByClassName('background')[0]
-        let showTxt = document.getElementsByClassName('showTxt')[0]
+    document.getElementsByClassName("content")[0].addEventListener("click", rotate)
+    dom.addEventListener("transitionend",showGiftName)
+        
+     function rotate() {
+    
         dom.removeAttribute('style')
         showTxt.innerHTML = ''
-        let index = getReward()
-        let degree = index * perDegree() + 360 * 5
+        giftIndex = getReward()
+        let degree = giftIndex * perDegree() + 360 * 5
         setTimeout(() => {
             dom.setAttribute('style', 'transform:rotate(' + degree +
                 'deg);transition:transform 2s ease-in-out;')
-            setTimeout(() => {
-                showTxt.innerHTML = "恭喜你，中了" + allData[index].name
-            }, 2000)
-
         }, 0)
-
+    }
+    function showGiftName(){
+        showTxt.innerHTML = "恭喜你，中了" + allData[giftIndex].name
     }
 </script>
 
